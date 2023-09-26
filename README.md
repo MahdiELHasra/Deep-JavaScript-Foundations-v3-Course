@@ -3,32 +3,25 @@
 
 ## Course Overview :
 - ### Types :
-        • Primitive Types
 
-        • Abstract Operations
-
-        • Coercion
-
-        • Equality
-
-        • TypeScript, Flow, etc.
+    -  Primitive Types
+    -  Abstract Operations
+    -  Coercion
+    -  Equality
+    -  TypeScript, Flow, etc.
 
 
-- ### Scope
-        • Nested Scope
+- ### Scope :
 
-        • Hoisting
-
-        • Closure
-
-        • Modules
+    -  Nested Scope
+    -  Hoisting
+    -  Closure
+    -  Modules
 
 
 - ### Objects (Oriented) :
-        • this
 
-        • class { }
-
-        • Prototypes
-        
-        • OO vs. OLOO
+    -  this
+    -  class { }
+    - Prototypes
+    - OO vs. OLOO
