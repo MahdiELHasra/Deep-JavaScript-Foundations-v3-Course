@@ -123,10 +123,10 @@ Unlike `parseInt(..)`, if any character in the string is non-numeric (`0-9` digi
 
 ### Invalid Number
 
-Mathematical operations can sometimes produce an invalid result. For example:	
+Mathematical operations can sometimes produce an invalid result. For example:
 
 ```js
-42 / "Kyle";            // NaN
+42 / "Kyle"; // NaN
 ```
 
 It's probably obvious, but if you try to divide a number by a string, that's an invalid mathematical operation.
@@ -136,32 +136,32 @@ Another type of invalid numeric operation is trying to coercively-convert a non-
 ```js
 myAge = Number("just a number");
 
-myAge;                  // NaN
+myAge; // NaN
 
-+undefined;             // NaN
++undefined; // NaN
 ```
 
 All such invalid operations (mathematical or coercive/numeric) produce the special `number` value called `NaN`.
 
 The historical root of "NaN" (from the IEEE-754[^IEEE754] specification) is as an acronym for "Not a Number". Technically, there are about 9 quadrillion values in the 64-bit IEEE-754 number space designated as "NaN", but JS treats all of them indistinguishably as the single `NaN` value.
 
-Unfortunately, that *not a number* meaning produces confusion, since `NaN` is *absolutely* a `number`.
+Unfortunately, that _not a number_ meaning produces confusion, since `NaN` is _absolutely_ a `number`.
 
-| TIP:                                                         |
-| :----------------------------------------------------------- |
-| Why is `NaN` a `number`?!? Think of the opposite: what if a mathematical/numeric operation, like `+` or `/`, produced a non-`number` value (like `null`, `undefined`, etc)? Wouldn't that be really strange and unexpected? What if they threw exceptions, so that you had to `try..catch` all your math? The only sensible behavior is, numeric/mathematical operations should *always* produce a `number`, even if that value is invalid because it came from an invalid operation. |
+| TIP:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Why is `NaN` a `number`?!? Think of the opposite: what if a mathematical/numeric operation, like `+` or `/`, produced a non-`number` value (like `null`, `undefined`, etc)? Wouldn't that be really strange and unexpected? What if they threw exceptions, so that you had to `try..catch` all your math? The only sensible behavior is, numeric/mathematical operations should _always_ produce a `number`, even if that value is invalid because it came from an invalid operation. |
 
 To avoid such confusion, I strongly prefer to define "NaN" as any of the following instead:
 
-* "iNvalid Number"
-* "Not actual Number"
-* "Not available Number"
-* "Not applicable Number"
+- "iNvalid Number"
+- "Not actual Number"
+- "Not available Number"
+- "Not applicable Number"
 
-`NaN` is a special value in JS, in that it's the only value in the language that lacks the *identity property* -- it's never equal to itself.
+`NaN` is a special value in JS, in that it's the only value in the language that lacks the _identity property_ -- it's never equal to itself.
 
 ```js
-NaN === NaN;            // false
+NaN === NaN; // false
 ```
 
 So unfortunately, the `===` operator cannot check a value to see if it's `NaN`. But there are some ways to do so:
@@ -169,19 +169,19 @@ So unfortunately, the `===` operator cannot check a value to see if it's `NaN`. 
 ```js
 politicianIQ = "nothing" / Infinity;
 
-Number.isNaN(politicianIQ);         // true
+Number.isNaN(politicianIQ); // true
 
-Object.is(NaN,politicianIQ);        // true
-[ NaN ].includes(politicianIQ);     // true
+Object.is(NaN, politicianIQ); // true
+[NaN].includes(politicianIQ); // true
 ```
 
 Here's a fact of virtually all JS programs, whether you realize it or not: `NaN` happens. Seriously, almost all programs that do any math or numeric conversions are subject to `NaN` showing up.
 
 If you're not properly checking for `NaN` in your programs where you do math or numeric conversions, I can say with some degree of certainty: you probably have a number bug in your program somewhere, and it just hasn't bitten you yet (that you know of!).
 
-| WARNING:                                                     |
-| :----------------------------------------------------------- |
-| JS originally provided a global function called `isNaN(..)` for `NaN` checking, but it unfortunately has a long-standing coercion bug. `isNaN("Kyle")` returns `true`, even though the string value `"Kyle"` is most definitely *not* the `NaN` value. This is because the global `isNaN(..)` function forces any non-`number` argument to coerce to a `number` first, before checking for `NaN`. Coercing `"Kyle"` to a `number` produces `NaN`, so now the function sees a `NaN` and returns `true`! This buggy global `isNaN(..)` still exists in JS, but should never be used. When `NaN` checking, always use `Number.isNaN(..)`, `Object.is(..)`, etc. |
+| WARNING:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| JS originally provided a global function called `isNaN(..)` for `NaN` checking, but it unfortunately has a long-standing coercion bug. `isNaN("Kyle")` returns `true`, even though the string value `"Kyle"` is most definitely _not_ the `NaN` value. This is because the global `isNaN(..)` function forces any non-`number` argument to coerce to a `number` first, before checking for `NaN`. Coercing `"Kyle"` to a `number` produces `NaN`, so now the function sees a `NaN` and returns `true`! This buggy global `isNaN(..)` still exists in JS, but should never be used. When `NaN` checking, always use `Number.isNaN(..)`, `Object.is(..)`, etc. |
 
 ### Double Zeros
 
@@ -191,38 +191,38 @@ This isn't just a funny JS quirk; it's mandated by the IEEE-754[^IEEE754] specif
 
 ```js
 function isNegZero(v) {
-    return v == 0 && (1 / v) == -Infinity;
+  return v == 0 && 1 / v == -Infinity;
 }
 
 regZero = 0 / 1;
 negZero = 0 / -1;
 
-regZero === negZero;        // true -- oops!
-Object.is(-0,regZero);      // false -- phew!
-Object.is(-0,negZero);      // true
+regZero === negZero; // true -- oops!
+Object.is(-0, regZero); // false -- phew!
+Object.is(-0, negZero); // true
 
-isNegZero(regZero);         // false
-isNegZero(negZero);         // true
+isNegZero(regZero); // false
+isNegZero(negZero); // true
 ```
 
 You may wonder why we'd ever need such a thing as `-0`. It can be useful when using numbers to represent both the magnitude of movement (speed) of some item (like a game character or an animation) and also its direction (e.g., negative = left, positive = right).
 
 Without having a signed zero value, you couldn't tell which direction such an item was pointing at the moment it came to rest.
 
-| NOTE:                                                        |
-| :----------------------------------------------------------- |
+| NOTE:                                                                                                                                                                                                  |
+| :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | While JS defines a signed zero in the `number` type, there is no corresponding signed zero in the `bigint` number type. As such, `-0n` is just interpreted as `0n`, and the two are indistinguishable. |
 
 ### Object or Primitive?
 
-Unlike other primitives like `42`, where you can create multiple copies of the same value, symbols *do* act more like specific object references in that they're always completely unique (for purposes of value assignment and equality comparison). The specification also categorizes the `Symbol()` function under the "Fundamental Objects" section, calling the function a "constructor", and even defining its `prototype` property.
+Unlike other primitives like `42`, where you can create multiple copies of the same value, symbols _do_ act more like specific object references in that they're always completely unique (for purposes of value assignment and equality comparison). The specification also categorizes the `Symbol()` function under the "Fundamental Objects" section, calling the function a "constructor", and even defining its `prototype` property.
 
-However, as mentioned earlier, `new` cannot be used with `Symbol(..)`; this is similar to the `BigInt()` "constructor". We clearly know `bigint` values are primitives, so `symbol` values seem to be of the same *kind*.
+However, as mentioned earlier, `new` cannot be used with `Symbol(..)`; this is similar to the `BigInt()` "constructor". We clearly know `bigint` values are primitives, so `symbol` values seem to be of the same _kind_.
 
 And in the specification's "Terms and Definitions", it lists symbol as a primitive value. [^PrimitiveValues] Moreover, the values themselves are used in JS programs as primitives rather than objects. For example, symbols are primarily used as keys in objects -- we know objects cannot use other object values as keys! -- along with strings, which are also primitives.
 
 As mentioned earlier, some JS engines even internally implement symbols as unique, monotonically incrementing integers (primitives!).
 
-Finally, as explained at the top of this chapter, we know primitive values are *not allowed* to have properties set on them, but are *auto-boxed* (see "Automatic Objects" in Chapter 3) internally to the corresponding object-wrapper type to facilitate property/method access. Symbols follow all these exact behaviors, the same as all the other primitives.
+Finally, as explained at the top of this chapter, we know primitive values are _not allowed_ to have properties set on them, but are _auto-boxed_ (see "Automatic Objects" in Chapter 3) internally to the corresponding object-wrapper type to facilitate property/method access. Symbols follow all these exact behaviors, the same as all the other primitives.
 
-All this considered, I think symbols are *much more* like primitives than objects, so that's how I present them in this book.
+All this considered, I think symbols are _much more_ like primitives than objects, so that's how I present them in this book.
