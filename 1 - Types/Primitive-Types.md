@@ -1,4 +1,4 @@
-# 1 : Primitive Values
+#  Primitive Types
 
 we confronted the common misconception that **_"everything in JS is an object"_**. We now circle back to that topic, and again dispel that myth.
 
